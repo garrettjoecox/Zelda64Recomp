@@ -17,6 +17,7 @@ namespace recompui {
         Style* add_resource_impl(std::unique_ptr<Style>&& resource);
     public:
         uint32_t slot_id;
+        bool capture_controller_input = true;
         auto operator<=>(const ContextId& rhs) const = default;
 
         template <typename T, typename... Args>
@@ -46,9 +47,6 @@ namespace recompui {
         void process_updates();
 
         static constexpr ContextId null() { return ContextId{ .slot_id = uint32_t(-1) }; }
-
-        // TODO
-        bool takes_input() { return true; }
     };
 
     ContextId create_context(const std::filesystem::path& path);

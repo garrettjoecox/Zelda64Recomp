@@ -150,7 +150,6 @@ Rml::Element* find_autofocus_element(Rml::Element* start) {
 struct ContextDetails {
     recompui::ContextId context;
     Rml::ElementDocument* document;
-    bool takes_input;
 };
 
 class UIState {
@@ -341,12 +340,10 @@ public:
             recompui::message_box("Attemped to show the same context twice");
             assert(false);
         }
-        bool takes_input = context.takes_input();
         Rml::ElementDocument* document = context.get_document();
         shown_contexts.push_back(ContextDetails{
             .context = context,
             .document = document,
-            .takes_input = takes_input
         });
 
         // auto& on_show = context.on_show;
@@ -384,7 +381,7 @@ public:
     }
 
     bool is_context_taking_input() {
-        return std::find_if(shown_contexts.begin(), shown_contexts.end(), [](auto& c){ return c.takes_input; }) != shown_contexts.end();
+        return std::find_if(shown_contexts.begin(), shown_contexts.end(), [](auto& c){ return c.context.capture_controller_input; }) != shown_contexts.end();
     }
 
     bool is_any_context_shown() {
@@ -394,7 +391,7 @@ public:
     Rml::ElementDocument* top_input_document() {
         // Iterate backwards and stop at the first context that takes input.
         for (auto it = shown_contexts.rbegin(); it != shown_contexts.rend(); it++) {
-            if (it->takes_input) {
+            if (it->context.capture_controller_input) {
                 return it->document;
             }
         }

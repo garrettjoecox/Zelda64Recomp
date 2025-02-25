@@ -145,6 +145,13 @@ void recompui_hide_context(uint8_t* rdram, recomp_context* ctx) {
     recompui::hide_context(ui_context);
 }
 
+void recompui_set_capture_controller_input(uint8_t* rdram, recomp_context* ctx) {
+    ContextId ui_context = get_context(rdram, ctx);
+    bool bool_arg = _arg<1, bool>(rdram, ctx);
+
+    ui_context.capture_controller_input = bool_arg;
+}
+
 // Resources
 void recompui_create_style(uint8_t* rdram, recomp_context* ctx) {
     ContextId ui_context = get_context(rdram, ctx);
@@ -722,6 +729,7 @@ void recompui::register_ui_exports() {
     REGISTER_FUNC(recompui_context_root);
     REGISTER_FUNC(recompui_show_context);
     REGISTER_FUNC(recompui_hide_context);
+    REGISTER_FUNC(recompui_set_capture_controller_input);
     REGISTER_FUNC(recompui_create_style);
     REGISTER_FUNC(recompui_create_element);
     REGISTER_FUNC(recompui_create_button);
